@@ -592,7 +592,10 @@ class QueryManager
                     $value['baseUri']  = $dataProvider->getBaseUri();
                     $value['httpStatusCode'] = $query->getResponse()->getStatusCode();
                     $value['responseHeaders'] = $query->getResponse()->getHeaders();
-                    $value['responseData'] = $query->getResponse()->getContent();
+                    $value['responseData'] = json_decode($query->getResponse()->getContent());
+                    if (!$value['responseData']) {
+                        $value['responseData'] = $query->getResponse()->getContent();
+                    }
 
                     if ($query->getResponse()->isHit()) {
                         $data['cached']++;
