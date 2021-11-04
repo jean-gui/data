@@ -597,7 +597,20 @@ class QueryManager
                     if ($query->getResponse()->isHit()) {
                         $data['cached']++;
                     }
+
+                    try {
+                        $value['responseObject'] = $query->get();
+                    } catch (\Throwable $e) {
+                        $value['responseObjectErrors']['get'] = $e;
+                        try {
+                            $value['responseObject'] = $query->getCollection();
+                        } catch (\Throwable $e) {
+                            $value['responseObjectErrors']['getCollection'] = $e;
+                        }
+                    }
+
                 }
+                
                 if ($dataProvider instanceof Http) {
                     $value['dataProviderType'] = 'Http';
 
